@@ -1,12 +1,24 @@
 # usage ./planner.py domain.pddl problem.pddl plan.ipc
-import urllib2, json, sys
+import pdb
+import urllib.request as urllibreq
+import urllib
+import json, sys
 
 data = {'domain': open(sys.argv[1], 'r').read(),
-                'problem': open(sys.argv[2], 'r').read()}
+        'problem': open(sys.argv[2], 'r').read()}
 
-req = urllib2.Request('http://solver.planning.domains/solve')
-req.add_header('Content-Type', 'application/json')
-resp = json.loads(urllib2.urlopen(req, json.dumps(data)).read())
-
+req = urllibreq.Request('http://solver.planning.domains/solve')
+req.add_header('Content-Type', 'application/json; charset=utf-8')
+data_pddl = json.dumps(data)
+data = data_pddl.encode("utf-8")
+resp = json.loads(urllibreq.urlopen(req, data).read())
+if resp['status'] == 'ok':
+    plan = resp['result']['plan']
+    print('Plan succeeded:')
+    for x in plan:
+        print(x['name'])
+else:
+    print(resp['result'])
+pdb.set_trace()
 with open(sys.argv[3], 'w') as f:
-        f.write('\n'.join([act['name'] for act in resp['result']['plan']]
+    f.write('\n'.join([act['name'] for act in resp['result']['plan']]))
