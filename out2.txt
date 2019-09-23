@@ -1,0 +1,3 @@
+(walk dining_room_199 character_63)
+(walk food_apple_2002 character_63)
+(grab food_apple_2002 character_63)
