@@ -31,6 +31,8 @@ tables = []
 
 objects = ["(:objects"]
 for elem in nodes:
+    if elem['class_name'] in ['wall', 'ceiling', 'floor']:
+        continue
     old_name = (elem['class_name'], elem['id'])
     new_name = elem['class_name'] + '_' + str(elem['id'])
     obj2pddl_map[old_name] = new_name
@@ -40,6 +42,7 @@ for elem in nodes:
     if elem['class_name'] == 'table':
         tables.append(new_name)
     category = 'object'
+
     if elem['category'] == 'Characters': category = 'character'
     if elem['category'] == 'Rooms': category = 'room'
     objects.append('{} - {}'.format(new_name, category))
@@ -57,6 +60,8 @@ map_properties = {
 }
 for elem in nodes:
     old_name = (elem['class_name'], elem['id'])
+    if old_name not in obj2pddl_map.keys():
+        continue
     new_name = obj2pddl_map[old_name]
     properties = elem['properties']
     for prop in properties:
@@ -93,6 +98,6 @@ goal_str = '    \n'.join(goal)
 import pdb
 pdb.set_trace()
 final_pddl = header + object_str + init_str + goal_str + '\n)'
-with open('out.pddl', 'w+') as f:
+with open(args.file_out, 'w+') as f:
     f.write(final_pddl)
 
