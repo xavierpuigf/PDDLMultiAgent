@@ -1,4 +1,5 @@
 import json
+import utils_env_parser
 import itertools
 import glob
 import numpy as np
@@ -18,66 +19,44 @@ with open(args.file_env+'.json', 'r') as f:
     env_content = json.load(f)
     env_content = env_content['init_graph']
 nodes = env_content['nodes']
+
 header = '''
 (define (problem {})
 (:domain virtualhome)\n
 '''.format(args.problem_name, args.file_env)
 
-obj2pddl_map = {}
 obj2pddl_map_id = {}
 
 plates = []
 tables = []
 
-objects = ["(:objects"]
-for elem in nodes:
-    if elem['class_name'] in ['wall', 'ceiling', 'floor']:
-        continue
-    old_name = (elem['class_name'], elem['id'])
-    new_name = elem['class_name'] + '_' + str(elem['id'])
-    obj2pddl_map[old_name] = new_name
-    obj2pddl_map_id[elem['id']] = new_name
-    if 'food' in elem['class_name']:
-        plates.append(new_name)
-    if elem['class_name'] == 'table':
-        tables.append(new_name)
-    category = 'object'
+objects_pddl, obj2pddl_map_id = utils_env_parser.convert_objects_pddl(nodes)
 
-    if elem['category'] == 'Characters': category = 'character'
-    if elem['category'] == 'Rooms': category = 'room'
-    objects.append('{} - {}'.format(new_name, category))
+# Obtain plates and food
+plates = []
+tables = []
+for node in env_content['nodes']:
+    if 'food' in node['class_name']:
+        plates.append(obj2pddl_map_id[node['id']])
+    if node['class_name'] == 'table':
+        tables.append(obj2pddl_map_id[node['id']])
+
+properties_pddl = utils_env_parser.obtain_properties_pddl(
+        env_content['nodes'], 
+        obj2pddl_map_id)
+
+relations_pddl = utils_env_parser.obtain_relations_pddl(
+        env_content['edges'], 
+        obj2pddl_map_id)
+
+objects = ["(:objects"]
+objects += ['{} - {}'.format(x,y) for x,y in objects_pddl]
 objects.append(")")
 object_str = '    \n'.join(objects) +'\n'
 
 init = ['(:init']
-map_properties = {
-        'SURFACES':'surface',
-    'GRABBABLE': 'grabable',
-    'CONTAINER': 'container',
-    'INSIDE': 'inside',
-    'CLOSE': 'close',
-    'ON': 'ontop'
-}
-for elem in nodes:
-    old_name = (elem['class_name'], elem['id'])
-    if old_name not in obj2pddl_map.keys():
-        continue
-    new_name = obj2pddl_map[old_name]
-    properties = elem['properties']
-    for prop in properties:
-        if prop in map_properties.keys():
-            prop_name = map_properties[prop]
-            init.append('({} {})'.format(prop_name, new_name))
-
-for elem in env_content['edges']:
-    if elem['from_id'] in obj2pddl_map_id.keys() and elem['to_id'] in obj2pddl_map_id.keys():
-        elem1 = obj2pddl_map_id[elem['from_id']]
-        elem2 = obj2pddl_map_id[elem['to_id']]
-        if elem['relation_type'] in map_properties.keys():
-            new_relation = map_properties[elem['relation_type']]
-
-            relation = '({} {} {})'.format(new_relation, elem1, elem2)
-            init.append(relation)
+init += ['({} {})'.format(x,y) for x,y in properties_pddl]
+init += ['({} {})'.format(x,y) for x,y in relations_pddl]
 init.append(')')
 init_str = '    \n'.join(init) + '\n'
 
