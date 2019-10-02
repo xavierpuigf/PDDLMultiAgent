@@ -1,5 +1,5 @@
 (define (domain virtualhome)
-(:requirements :typing :action-costs :negative-preconditions)
+(:requirements :typing :action-costs :negative-preconditions :fluents)
 
 
 (:types character room object)

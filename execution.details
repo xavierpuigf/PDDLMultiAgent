@@ -1,0 +1,13 @@
+Plan found with cost: 6
+1. (WALK DINING_ROOM_199 CHARACTER_63)
+2. (WALK FOOD_VEGETABLE_2014 CHARACTER_63)
+3. (GRAB FOOD_VEGETABLE_2014 CHARACTER_63)
+4. (WALK TABLE_224 CHARACTER_63)
+5. (PUT FOOD_VEGETABLE_2014 TABLE_224 CHARACTER_63)
+6. (REACH-GOAL)
+Time: 4.288
+Generated: 0
+Expanded: 0
+Total time: 4.288
+Nodes generated during search: 5105
+Nodes expanded during search: 3668

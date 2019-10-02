@@ -10,7 +10,7 @@ import json, sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--domain_name", default='domain.pddl', type=str)
-parser.add_argument("--problem_name", default='example_out.pddl', type=str)
+parser.add_argument("--problem_name", default='out_problems/example_out.pddl', type=str)
 parser.add_argument("--file_out", default='out', type=str)
 
 def online_planner(domain_name, problem_name, file_out):
@@ -52,5 +52,5 @@ def local_planner(domain_name, problem_name, file_out):
 
 if __name__ ==  '__main__':
     args = parser.parse_args()
-    #local_planner(args.domain_name, args.problem_name, args.file_out)
-    online_planner(args.domain_name, args.problem_name, args.file_out)
+    local_planner(args.domain_name, args.problem_name, args.file_out)
+    #online_planner(args.domain_name, args.problem_name, args.file_out)

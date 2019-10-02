@@ -1,6 +1,6 @@
 import json
+from goals_env_parser import *
 import utils_env_parser
-import itertools
 import glob
 import numpy as np
 from multiprocessing import Pool
@@ -32,15 +32,6 @@ tables = []
 
 objects_pddl, obj2pddl_map_id = utils_env_parser.convert_objects_pddl(nodes)
 
-# Obtain plates and food
-plates = []
-tables = []
-for node in env_content['nodes']:
-    if 'food' in node['class_name']:
-        plates.append(obj2pddl_map_id[node['id']])
-    if node['class_name'] == 'table':
-        tables.append(obj2pddl_map_id[node['id']])
-
 properties_pddl = utils_env_parser.obtain_properties_pddl(
         env_content['nodes'], 
         obj2pddl_map_id)
@@ -60,17 +51,10 @@ init += ['({} {} {})'.format(x,y,z) for x,y,z in relations_pddl]
 init.append(')')
 init_str = '    \n'.join(init) + '\n'
 
-comb_plates = list(itertools.combinations(plates, 2))
-comb_tables = list(itertools.combinations(tables, 1))
 
+combi = TableSet(obj2pddl_map_id, env_content, 2).compute_goal()
 
 goal = ['(:goal']
-combinames = []
-for plates in comb_plates:
-    for tables in comb_tables:
-        combinames.append('(and (ontop {1} {2}) (ontop {0} {2}))'.format(plates[0], plates[1], tables[0]))
-print(len(combinames))
-combi = '(or {})'.format(' '.join(combinames))
 goal.append(combi)
 goal.append(')')
 goal_str = '    \n'.join(goal)
