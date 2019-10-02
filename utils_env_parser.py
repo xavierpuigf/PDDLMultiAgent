@@ -15,11 +15,12 @@ def convert_objects_pddl(object_nodes):
     return objects, obj2pddl_map
 
 
-def obtain_properties_pddl(nodes, obj2pddl_map)
+def obtain_properties_pddl(nodes, obj2pddl_map):
     map_properties = {
         'SURFACES':'surface',
         'GRABBABLE': 'grabable',
         'CONTAINER': 'container',
+        'SITTABLE': 'sittable',
     }
     props = []
     for elem in nodes:
@@ -32,22 +33,35 @@ def obtain_properties_pddl(nodes, obj2pddl_map)
         for prop in properties:
             if prop in map_properties.keys():
                 prop_name = map_properties[prop]
-                props.append(prop_name, naw_name)
+                props.append((prop_name, new_name))
     return props
-                init.append('({} {})'.format(prop_name, new_name))
 
 
-def obtain_relationships_pddl(edges, obj2pddl_map):
+def obtain_relations_pddl(edges, obj2pddl_map):
     map_edges = {
         'INSIDE': 'inside',
         'CLOSE': 'close',
         'ON': 'ontop'
     }
+    relations = []
     for elem in edges:
-        if elem['from_id'] in obj2pddl_map_id.keys() and elem['to_id'] in obj2pddl_map.keys():
+        if elem['from_id'] in obj2pddl_map.keys() and elem['to_id'] in obj2pddl_map.keys():
             elem1 = obj2pddl_map[elem['from_id']]
             elem2 = obj2pddl_map[elem['to_id']]
             if elem['relation_type'] in map_edges.keys():
                 new_relation = map_edges[elem['relation_type']]
-                relation = '({} {} {})'.format(new_relation, elem1, elem2)
-                init.append(relation)
+                relation = (new_relation, elem1, elem2)
+                relations.append(relation)
+    return relations
+
+def convert_to_virtualhome_program(action_list):
+    action_list = [x[1:-1].split()[:-1] for x in action_list]
+    action_list_str = []
+    for action_instr in action_list:
+        if len(action_instr) == 0:
+            continue
+        action_item = '[{}]'.format(action_instr[0].upper())
+        if len(action_instr) > 1:
+            objects_item = ['<{}> ({})'.format('_'.join(l.split('_')[:-1]), l.split('_')[-1]) for l in action_instr[1:]]
+        action_list_str.append('{} {}'.format(action_item, ' '.join(objects_item)))
+    return action_list_str

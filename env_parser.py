@@ -11,7 +11,7 @@ import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--file_env", default='example_env', type=str)
-parser.add_argument("--file_out", default='example_out.pddl', type=str)
+parser.add_argument("--file_out", default='out_problems/example_out.pddl', type=str)
 parser.add_argument("--problem_name", default='setuptable', type=str)
 
 args = parser.parse_args()
@@ -56,7 +56,7 @@ object_str = '    \n'.join(objects) +'\n'
 
 init = ['(:init']
 init += ['({} {})'.format(x,y) for x,y in properties_pddl]
-init += ['({} {})'.format(x,y) for x,y in relations_pddl]
+init += ['({} {} {})'.format(x,y,z) for x,y,z in relations_pddl]
 init.append(')')
 init_str = '    \n'.join(init) + '\n'
 
