@@ -2,7 +2,7 @@
 PDDL Definition for tasks in VirtualHome
 
 To find a plan for the `example_problem.pddl` run
-```python planner.py domain.pddl example_problem.pddl out```
+```python planner.py domain.pddl eample_program/example_problem.pddl out```
 Use this API to solve the PDDL http://planning.domains/
 
 
@@ -14,5 +14,5 @@ python env_parser.py
 
 And then solve it using
 ```
-python planner.py domain.pddl example_out.pddl 
+python planner.py
 ```

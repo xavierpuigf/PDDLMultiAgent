@@ -1,6 +1,0 @@
-(walk dining_room_199 character_63)
-(walk food_vegetable_2014 character_63)
-(grab food_vegetable_2014 character_63)
-(walk table_224 character_63)
-(put food_vegetable_2014 table_224 character_63)
-(reach-goal)

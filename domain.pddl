@@ -1,8 +1,11 @@
 (define (domain virtualhome)
-(:requirements :typing :action-costs :negative-preconditions :fluents)
+(:requirements :typing :action-costs :negative-preconditions :fluents :action-costs)
 
 
 (:types character room object)
+(:functions
+    (objects_grabbed)
+)
 (:predicates
 
     ; States objects
@@ -93,9 +96,9 @@
     (and (not (grabbed ?char_arg ?obj))
 	 (found ?char_arg  ?obj)
 	 (close ?char_arg ?obj)
-	 (grabable ?obj))
+	 (grabable ?obj) (< (objects_grabbed) 2))
   :effect
-    (and (grabbed ?char_arg ?obj) 
+    (and (grabbed ?char_arg ?obj) (increase (objects_grabbed) 1)
 	 (forall (?obj_dest - object) 
 		 (when (or (inside ?obj ?obj_dest) (ontop ?obj ?obj_dest))
 		       (and (not (inside ?obj ?obj_dest)) (not (ontop ?obj ?obj_dest)))
@@ -117,7 +120,7 @@
 	 (or (surface ?object_dest) (container ?object_dest))
      )
   :effect
-    (and 
+    (and  (decrease (objects_grabbed) 1) 
 	(not (grabbed ?char_arg ?object_grabbed))
 	(ontop ?object_grabbed ?object_dest)
     )
