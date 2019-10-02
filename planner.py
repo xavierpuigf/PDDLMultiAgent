@@ -38,6 +38,7 @@ def online_planner(domain_name, problem_name, file_out):
         f.writelines(program)
 
 def local_planner(domain_name, problem_name, file_out):
+    # Based on: https://github.com/LAPKT-dev/LAPKT-public/tree/master/planners/siw_plus-then-bfs_f-ffparser
     # ./sw+bfsf/siw-then-bfsf --domain domain.pddl --problem example_out.pddl out_ex
     print('here')
     os.system('./sw+bfsf/siw-then-bfsf --domain {} --problem {} --output {}'.format(domain_name, problem_name, file_out))

@@ -1,0 +1,8 @@
+(walk kitchen char1)
+(walk drawer char1)
+(open drawer char1)
+(walk plate1 char1)
+(grab plate1 char1)
+(walk livingroom char1)
+(walk table char1)
+(put plate1 table char1)

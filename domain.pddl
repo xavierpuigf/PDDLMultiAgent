@@ -177,4 +177,16 @@
 	 )
      )
 )
+
+
+(:action standup
+ :parameters (
+    ?from_sit - object
+    ?char_arg - character
+ )
+ :precondition
+    (sitting ?char_arg ?from_sit)
+ :effect
+    (not (sitting ?char_arg ?from_sit))
+)
 )
