@@ -31,6 +31,7 @@
     (sittable ?x - object)
     (surface ?x - object)
     (container ?x - object)
+    (electronics ?x - object)
 )
 
 (:action walk
@@ -182,6 +183,19 @@
 )
 
 
+(:action sit
+ :parameters (
+    ?to_sit - object
+    ?char_arg - character
+ )
+ :precondition
+    (and (sittable ?to_sit) (close ?char_arg ?to_sit) (found ?char_arg ?to_sit)
+	(not (sitting ?char_arg ?to_sit)))
+ :effect
+    (sitting ?char_arg ?to_sit)
+)
+
+
 (:action standup
  :parameters (
     ?from_sit - object
@@ -191,5 +205,33 @@
     (sitting ?char_arg ?from_sit)
  :effect
     (not (sitting ?char_arg ?from_sit))
+)
+
+
+
+
+(:action turnon
+ :parameters (
+    ?obj - object
+    ?char_arg - character
+ )
+ :precondition
+    (and (electronics ?obj) (close ?char_arg ?obj) (found ?char_arg ?obj)
+	(not (on ?obj)))
+ :effect
+    (on ?obj)
+)
+
+
+(:action turnoff
+ :parameters (
+    ?obj - object
+    ?char_arg - character
+ )
+ :precondition
+    (and (electronics ?obj) (close ?char_arg ?obj) (found ?char_arg ?obj)
+	(on ?obj))
+ :effect
+    (not (on ?obj))
 )
 )

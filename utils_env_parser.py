@@ -14,6 +14,29 @@ def convert_objects_pddl(object_nodes):
         objects.append((new_name, category))
     return objects, obj2pddl_map
 
+def obtain_states_pddl(nodes, obj2pddl_map):
+    map_properties = {
+        'ON': ('on', True),
+        'OPEN': ('open', True),
+        'OFF': ('on', False),
+        'CLOSED': ('open', False)
+    }
+    props = []
+    for elem in nodes:
+        old_name = (elem['class_name'], elem['id'])
+        id = elem['id']
+        if id not in obj2pddl_map.keys():
+            continue
+        new_name = obj2pddl_map[elem['id']]
+        properties = elem['states']
+        for prop in properties:
+            if prop in map_properties.keys():
+                prop_name, is_true = map_properties[prop]
+                if is_true:
+                    props.append('({} {})'.format(prop_name, new_name))
+                else:
+                    props.append('(not ({} {}))'.format(prop_name, new_name))
+    return props
 
 def obtain_properties_pddl(nodes, obj2pddl_map):
     map_properties = {
@@ -21,6 +44,7 @@ def obtain_properties_pddl(nodes, obj2pddl_map):
         'GRABBABLE': 'grabable',
         'CONTAINER': 'container',
         'SITTABLE': 'sittable',
+        'HAS_SWITCH': 'electronics',
     }
     props = []
     for elem in nodes:

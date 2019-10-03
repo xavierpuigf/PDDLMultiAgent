@@ -19,6 +19,14 @@ class Goal():
 
 class Relax(Goal):
     def compute_goal(self):
+        return '''
+            (exists (?object_sofa - object ?object_tv - object ?char - character)
+                    (and 
+                        (on ?object_tv)
+                        (sitting ?char ?object_sofa)
+                        (facing ?object_tv ?object_sofa))
+            )
+            '''
         # Refill this
 
 class TableSet(Goal):

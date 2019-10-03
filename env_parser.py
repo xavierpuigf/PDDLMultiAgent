@@ -33,6 +33,10 @@ tables = []
 
 objects_pddl, obj2pddl_map_id = utils_env_parser.convert_objects_pddl(nodes)
 
+states_pddl = utils_env_parser.obtain_states_pddl(
+        env_content['nodes'], 
+        obj2pddl_map_id)
+
 properties_pddl = utils_env_parser.obtain_properties_pddl(
         env_content['nodes'], 
         obj2pddl_map_id)
@@ -48,16 +52,18 @@ object_str = '    \n'.join(objects) +'\n'
 
 init = ['(:init']
 init += ['(= (objects_grabbed) 0)']
+init += states_pddl
 init += ['({} {})'.format(x,y) for x,y in properties_pddl]
 init += ['({} {} {})'.format(x,y,z) for x,y,z in relations_pddl]
 init.append(')')
 init_str = '    \n'.join(init) + '\n'
 
 
-combi = TableSet(obj2pddl_map_id, env_content, 3).compute_goal()
+#goal_str = TableSet(obj2pddl_map_id, env_content, 3).compute_goal()
+goal_str = Relax(obj2pddl_map_id, env_content).compute_goal()
 
 goal = ['(:goal']
-goal.append(combi)
+goal.append(goal_str)
 goal.append(')')
 goal_str = '    \n'.join(goal)
 final_pddl = header + object_str + init_str + goal_str + '\n)'
