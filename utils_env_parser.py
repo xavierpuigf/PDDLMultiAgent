@@ -65,7 +65,8 @@ def obtain_relations_pddl(edges, obj2pddl_map):
     map_edges = {
         'INSIDE': 'inside',
         'CLOSE': 'close',
-        'ON': 'ontop'
+        'ON': 'ontop',
+        'FACING': 'facing'
     }
     relations = []
     for elem in edges:

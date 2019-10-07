@@ -44,7 +44,8 @@ def local_planner(domain_name, problem_name, file_out):
     print('Finished')
     with open(file_out, 'r') as f:
         program = f.readlines()
-        program = program[:-1]
+        if len(program[-1]) == 0:
+            program = program[:-1]
     program = utils_env_parser.convert_to_virtualhome_program(program)
     program = [x+'\n' for x in program]
     with open(file_out, 'w+') as f:

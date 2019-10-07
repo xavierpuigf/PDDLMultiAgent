@@ -8924,13 +8924,6 @@ folder_437 - object
 (close folder_437 bookshelf_354)    
 )
 (:goal    
-
-            (exists (?object_sofa - object ?object_tv - object ?char - character)
-                    (and 
-                        (on ?object_tv)
-                        (sitting ?char ?object_sofa)
-			)
-            )
-                
+(or (and (or (and (ontop waterglass_57 coffeetable_107) (ontop wineglass_193 coffeetable_107) (ontop wineglass_194 coffeetable_107))) (or (and (ontop plate_54 coffeetable_107) (ontop plate_189 coffeetable_107) (ontop plate_195 coffeetable_107)))))    
 )
 )
