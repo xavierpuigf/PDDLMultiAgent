@@ -28,9 +28,12 @@ if __name__ == '__main__':
         goal_name = goal['goal']
         out_file = '{}/{}.txt'.format(args.folder_plans, goal['file_name'])
         if os.path.isfile(out_file):
+            file_stats = out_file + '_stats.txt'
+            with open(file_stats, 'r') as f:
+                stats = f.readlines()
             with open(out_file, 'r') as f:
                 program = f.readlines()
             if goal_name not in achieved_program.keys():
                 achieved_program[goal_name] = []
-            achieved_program[goal_name].append((program, out_file))
+            achieved_program[goal_name].append((program, stats, out_file))
     ipdb.set_trace()

@@ -1,5 +1,6 @@
 
 # usage ./planner.py domain.pddl problem.pddl plan.ipc
+from tqdm import tqdm
 import os
 import pdb
 import utils_env_parser
@@ -27,7 +28,8 @@ if __name__ == '__main__':
     with open(args.input_file, 'r') as f:
         file_plans = json.load(f)
     p = Pool(20)
-    p.map(solve_plan, file_plans)
+    for _ in tqdm(p.imap_unordered(solve_plan, file_plans)):
+        pass
     pdb.set_trace()
 
 
