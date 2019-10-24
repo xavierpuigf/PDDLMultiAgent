@@ -7,13 +7,15 @@ import urllib.request as urllibreq
 import planner
 import urllib
 import argparse
+from multiprocessing import Pool
+
 import json, sys
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--domain_name", default='domain.pddl', type=str)
-parser.add_argument("--input_file", default='out_problems/info.json', type=str)
-parser.add_argument("--folder_out", default='out', type=str)
+parser.add_argument("--input_file", default='data/out_problems/info.json', type=str)
+parser.add_argument("--folder_out", default='data/out_plans/', type=str)
 
 def solve_plan(info):
     problem_name = info['pddl_path']
@@ -24,7 +26,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.input_file, 'r') as f:
         file_plans = json.load(f)
-    pool = Pool(20)
+    p = Pool(20)
     p.map(solve_plan, file_plans)
     pdb.set_trace()
 

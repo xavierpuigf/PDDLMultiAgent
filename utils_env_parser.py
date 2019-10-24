@@ -42,7 +42,7 @@ def obtain_properties_pddl(nodes, obj2pddl_map):
     map_properties = {
         'SURFACES':'surface',
         'GRABBABLE': 'grabable',
-        'CONTAINER': 'container',
+        'CAN_OPEN': 'container',
         'SITTABLE': 'sittable',
         'HAS_SWITCH': 'electronics',
     }

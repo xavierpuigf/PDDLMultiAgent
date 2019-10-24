@@ -1,4 +1,5 @@
 # usage ./planner.py domain.pddl problem.pddl plan.ipc
+import subprocess
 import os
 import pdb
 import utils_env_parser
@@ -10,7 +11,7 @@ import json, sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--domain_name", default='domain.pddl', type=str)
-parser.add_argument("--problem_name", default='out_problems/example_out.pddl', type=str)
+parser.add_argument("--problem_name", default='example_problem/example_problem.pddl', type=str)
 parser.add_argument("--file_out", default='out', type=str)
 
 def online_planner(domain_name, problem_name, file_out):
@@ -40,16 +41,20 @@ def online_planner(domain_name, problem_name, file_out):
 def local_planner(domain_name, problem_name, file_out):
     # Based on: https://github.com/LAPKT-dev/LAPKT-public/tree/master/planners/siw_plus-then-bfs_f-ffparser
     # ./sw+bfsf/siw-then-bfsf --domain domain.pddl --problem example_out.pddl out_ex
-    os.system('./sw+bfsf/siw-then-bfsf --domain {} --problem {} --output {}'.format(domain_name, problem_name, file_out))
-    print('Finished')
+    #os.system('./sw+bfsf/siw-then-bfsf --domain {} --problem {} --output {}'.format(domain_name, problem_name, file_out))
+    with open(file_out + '_stats.txt', 'w+') as outfile:
+        proc = subprocess.call(['./sw+bfsf/siw-then-bfsf', '--domain', domain_name, '--problem', problem_name, '--output', file_out], stdout=outfile)
     with open(file_out, 'r') as f:
         program = f.readlines()
+        if len(program) == 0:
+            return
         if len(program[-1]) == 0:
             program = program[:-1]
     program = utils_env_parser.convert_to_virtualhome_program(program)
     program = [x+'\n' for x in program]
-    with open(file_out, 'w+') as f:
-        f.writelines(program)
+    if len(program) > 0:
+        with open(file_out, 'w+') as f:
+            f.writelines(program)
 
 if __name__ ==  '__main__':
     args = parser.parse_args()

@@ -46,7 +46,7 @@ class TableSet(Goal):
                     objects_type[-1].append(object_dict[node['id']])
 
         for node in graph['nodes']:
-            if node['class_name'] == 'coffeetable':
+            if node['class_name'] == 'table':
                 tables.append(object_dict[node['id']])
         
         combis = []

@@ -10,9 +10,8 @@ import argparse
 import pdb
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--folder_env", default='input_envs', type=str)
-parser.add_argument("--folder_out", default='out_problems', type=str)
-parser.add_argument("--problem_name", default='setuptable', type=str)
+parser.add_argument("--folder_env", default='data/input_envs', type=str)
+parser.add_argument("--folder_out", default='data/out_problems', type=str)
 
 
 def parse_env(env_content, goal, goal_name):
@@ -69,6 +68,7 @@ def parse_env(env_content, goal, goal_name):
 
 if __name__ == '__main__':
     args = parser.parse_args()
+    os.makedirs(args.folder_out, exist_ok=True)
     envs = glob.glob('{}/*.json'.format(args.folder_env))
     info_file_env = []
     file_count = 0
