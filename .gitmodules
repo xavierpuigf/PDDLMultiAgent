@@ -1,0 +1,3 @@
+[submodule "LAPKT-public"]
+	path = LAPKT-public
+	url = https://github.com/LAPKT-dev/LAPKT-public.git

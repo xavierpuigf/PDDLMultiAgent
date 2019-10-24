@@ -1,4 +1,5 @@
-virtualhome/*
+virtualhome
+virtualhome*
 __pycache__/*
 input_envs/*
 out_problems/*
