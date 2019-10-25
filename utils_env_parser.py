@@ -90,3 +90,56 @@ def convert_to_virtualhome_program(action_list):
             objects_item = ['<{}> ({})'.format('_'.join(l.split('_')[:-1]), l.split('_')[-1]) for l in action_instr[1:]]
         action_list_str.append('{} {}'.format(action_item, ' '.join(objects_item)))
     return action_list_str
+
+
+def parse_env(env_content, goal, goal_name):
+    nodes = env_content['nodes']
+
+    header = '''
+    (define (problem {})
+    (:domain virtualhome)\n
+    '''.format(goal_name)
+
+    obj2pddl_map_id = {}
+
+    plates = []
+    tables = []
+
+    objects_pddl, obj2pddl_map_id = convert_objects_pddl(nodes)
+
+    states_pddl = obtain_states_pddl(
+            env_content['nodes'], 
+            obj2pddl_map_id)
+
+    properties_pddl = obtain_properties_pddl(
+            env_content['nodes'], 
+            obj2pddl_map_id)
+
+    relations_pddl = obtain_relations_pddl(
+            env_content['edges'], 
+            obj2pddl_map_id)
+
+    objects = ["(:objects"]
+    objects += ['{} - {}'.format(x,y) for x,y in objects_pddl]
+    objects.append(")")
+    object_str = '    \n'.join(objects) +'\n'
+
+    init = ['(:init']
+    init += ['(= (objects_grabbed) 0)']
+    init += states_pddl
+    init += ['({} {})'.format(x,y) for x,y in properties_pddl]
+    init += ['({} {} {})'.format(x,y,z) for x,y,z in relations_pddl]
+    init.append(')')
+    init_str = '    \n'.join(init) + '\n'
+
+
+    goal_str, success = goal.compute_goal(obj2pddl_map_id, env_content)
+    if not success:
+        return '', False
+
+    goal = ['(:goal']
+    goal.append(goal_str)
+    goal.append(')')
+    goal_str = '    \n'.join(goal)
+    final_pddl = header + object_str + init_str + goal_str + '\n)'
+    return final_pddl, True

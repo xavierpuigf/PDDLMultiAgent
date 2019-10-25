@@ -1,0 +1,12 @@
+Plan found with cost: 5
+1. (WALK BEDROOM_67 CHARACTER_65)
+2. (WALK TRASHCAN_99 CHARACTER_65)
+3. (OPEN TRASHCAN_99 CHARACTER_65)
+4. (WALK CHECK_2020 CHARACTER_65)
+5. (REACH-GOAL)
+Time: 224.861
+Generated: 0
+Expanded: 0
+Total time: 224.861
+Nodes generated during search: 11165
+Nodes expanded during search: 5146

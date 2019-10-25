@@ -16,6 +16,33 @@ class Goal():
 
 
 
+class Findclass(Goal):
+    " Find any node of a given class"
+    def __init__(self, class_name):
+        self.class_name = class_name
+
+    def compute_goal(self, object_dict, graph):
+        id_for_name = [x['id'] for x in graph['nodes'] if x['class_name'] == self.class_name]
+        pddl_name = [object_dict[id] for id in id_for_name]
+        char_node = [x for x in graph['nodes'] if x['class_name'] == 'character'][0]
+        char_node = object_dict[char_node['id']]
+        object_or = ['(and (observable {0} {1}) (close {0} {1}))'.format(char_node, name) for name in pddl_name]
+        return '(or {})'.format(' '.join(object_or)), True
+
+
+
+
+class Findnode(Goal):
+    " Find a particular node"
+    def __init__(self, id_num):
+        self.id_num = id_num
+    def compute_goal(self, object_dict, graph):
+        node_name_str = object_dict[self.id_num]
+        char_node = [x for x in graph['nodes'] if x['class_name'] == 'character'][0]
+        char_node = object_dict[char_node['id']]
+        return '(and (observable {0} {1}) (close {0} {1}))'.format(char_node, node_name_str), True
+
+
 class Relax(Goal):
     def compute_goal(self, object_dict, graph):
         return '''

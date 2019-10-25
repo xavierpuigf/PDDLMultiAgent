@@ -15,8 +15,8 @@ import json, sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--domain_name", default='domain.pddl', type=str)
-parser.add_argument("--input_file", default='data/out_problems/info.json', type=str)
-parser.add_argument("--folder_out", default='data/out_plans/', type=str)
+parser.add_argument("--input_file", default='data/data_subgoals/out_problems/info.json', type=str)
+parser.add_argument("--folder_out", default='data/data_subgoals/out_plans/', type=str)
 
 def solve_plan(info):
     problem_name = info['pddl_path']
