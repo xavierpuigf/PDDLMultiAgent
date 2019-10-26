@@ -48,11 +48,18 @@
 	; If we are in a room, everything in the room is observable
 	(forall (?y - object)
 	    (when (and (inside ?y ?room_arg) 
-		       (not (forall (?container - object) 
+		       (not (exists (?container - object) 
 				    (and (container ?container)
 					 (inside ?y ?container) 
-					 (open ?container)))))
+					 (not (open ?container))))))
 		  (observable ?char_arg ?y)
+	    )
+	)
+	; if this is a container, then the objects inside are visible
+	(forall (?y ?obj_inside - object)
+	    (when (and (inside ?y ?room_arg) (container ?y) (open ?y)
+		      (inside ?obj_inside ?y))
+		  (observable ?char_arg ?obj_inside)
 	    )
 	)
 	; Everything out of the room is not observable anymore

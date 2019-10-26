@@ -18,8 +18,9 @@
     (inside drawer kitchen)
     (inside table livingroom)
     (inside char1 livingroom)
+    (inside plate1 kitchen)
 )
 (:goal
-    (and (ontop plate1 table) (ontop plate3 table))
+    (observable char1 plate1)
 )
 )

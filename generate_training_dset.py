@@ -27,6 +27,9 @@ if __name__ ==  '__main__':
     info = []
     for dp in info_file:
         program_file = '{}/out_plans/{}.txt'.format(args.dset_folder, dp['file_name'])
+        #if not os.path.isfile(program_file):
+        #    print(program_file)
+        #continue
         if os.path.isfile(program_file):
             curr_env_path = dp['env_path']
             new_env_path = '{}/init_envs/{}'.format(args.file_out, curr_env_path.split('/')[-1])
