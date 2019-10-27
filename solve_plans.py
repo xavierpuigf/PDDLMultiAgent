@@ -21,7 +21,8 @@ parser.add_argument("--folder_out", default='data/data_subgoals/out_plans/', typ
 def solve_plan(info):
     problem_name = info['pddl_path']
     out_name = '{}/{}.txt'.format(args.folder_out, info['file_name'])
-    planner.local_planner(args.domain_name, problem_name, out_name)
+    if not os.path.isfile(out_name):
+        planner.local_planner(args.domain_name, problem_name, out_name)
 
 if __name__ == '__main__':
     args = parser.parse_args()

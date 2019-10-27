@@ -1,10 +1,9 @@
-Plan found with cost: 3
+Plan found with cost: 2
 1. (WALK KITCHEN CHAR1)
-2. (WALK DRAWER CHAR1)
-3. (OPEN DRAWER CHAR1)
-Time: 0
+2. (WALK PLATE1 CHAR1)
+Time: 0.000231
 Generated: 0
 Expanded: 0
-Total time: -1.04308e-10
-Nodes generated during search: 16
-Nodes expanded during search: 8
+Total time: 0.000247
+Nodes generated during search: 8
+Nodes expanded during search: 2

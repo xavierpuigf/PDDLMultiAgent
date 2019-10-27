@@ -2,6 +2,7 @@ import sys
 from tqdm import tqdm
 import ipdb
 import random
+import pdb
 import json
 import glob
 sys.path.append('virtualhome/simulation/')
@@ -76,6 +77,7 @@ def populate_env(info):
                 curr_environment.add_node(node_object)
                 curr_environment.add_edge(node_object, relation, node_location)
 
+
                 objects_added += 1
                 curr_id += 1
             else:
@@ -108,7 +110,7 @@ def populate_env(info):
 if __name__ == '__main__':
     envs = get_initial_envs()
     envs_per_apt = 50
-    graph_dir = 'input_envs'
+    graph_dir = 'data/data_subgoals2/input_envs'
     for env in tqdm(envs):
         env_part = env.split('/')[-1].split('.')[-2]
         inputs = [(env, '{}/{}_{}.json'.format(graph_dir, env_part, it)) for it in range(envs_per_apt)]

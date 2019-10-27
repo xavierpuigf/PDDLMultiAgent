@@ -57,11 +57,16 @@
 	)
 	; if this is a container, then the objects inside are visible
 	(forall (?y ?obj_inside - object)
-	    (when (and (inside ?y ?room_arg) (container ?y) (open ?y)
-		      (inside ?obj_inside ?y))
+	    (when (and (inside ?y ?room_arg) (container ?y) (open ?y) (inside ?obj_inside ?y))
 		  (observable ?char_arg ?obj_inside)
 	    )
 	)
+	(forall (?y ?obj_inside - object)
+	    (when (and (inside ?y ?room_arg) (ontop ?obj_inside ?y))
+		  (observable ?char_arg ?obj_inside)
+	    )
+	)
+
 	; Everything out of the room is not observable anymore
 	; Note. Except for what we are grabbing
 	(forall (?y - object)
