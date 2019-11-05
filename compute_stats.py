@@ -14,9 +14,9 @@ import json, sys
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input_file", default='data/data_subgoals/out_problems/info.json', type=str)
-parser.add_argument("--folder_plans", default='data/data_subgoals/out_plans/', type=str)
-parser.add_argument("--folder_stats", default='data/data_subgoals/out_plans/stats/', type=str)
+parser.add_argument("--input_file", default='data/data_toy3/out_problems/info.json', type=str)
+parser.add_argument("--folder_plans", default='data/data_toy3/out_plans/', type=str)
+parser.add_argument("--folder_stats", default='data/data_toy3/stats/', type=str)
 
 
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     os.makedirs(args.folder_stats, exist_ok=True)
 
     file_stats = '{}/stats.json'.format(args.folder_stats)
-    with open(file_stats, 'w+') as f:
-        f.write(json.dumps(stats_goal, indent=4))
+    #with open(file_stats, 'w+') as f:
+    #    f.write(json.dumps(stats_goal, indent=4))
     
     ipdb.set_trace()

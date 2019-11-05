@@ -38,36 +38,26 @@
  :parameters (
     ?room_arg - room
     ?char_arg - character
+    ;?prev_room - room
  )
+ :precondition
+    (not (inside ?char_arg ?room_arg))
  :effect
-    (and (inside ?char_arg ?room_arg)
+    (and
+	(inside ?char_arg ?room_arg)
 	; We are not in another room anymore
 	(forall (?other_room - room)
-		(when (not (= ?other_room ?room_arg)) 
-		      (not (inside ?char_arg ?other_room))))
+	    (when (not (= ?other_room ?room_arg)) (not (inside ?char_arg ?other_room)))
+	)
 	; If we are in a room, everything in the room is observable
 	(forall (?y - object)
-	    (when (and (inside ?y ?room_arg) 
-		       (not (exists (?container - object) 
-				    (and (container ?container)
-					 (inside ?y ?container) 
-					 (not (open ?container))))))
+	    (when (inside ?y ?room_arg) 
 		  (observable ?char_arg ?y)
 	    )
 	)
-	; if this is a container, then the objects inside are visible
-	(forall (?y ?obj_inside - object)
-	    (when (and (inside ?y ?room_arg) (container ?y) (open ?y) (inside ?obj_inside ?y))
-		  (observable ?char_arg ?obj_inside)
-	    )
-	)
-	(forall (?y ?obj_inside - object)
-	    (when (and (inside ?y ?room_arg) (ontop ?obj_inside ?y))
-		  (observable ?char_arg ?obj_inside)
-	    )
-	)
 
-	; Everything out of the room is not observable anymore
+	; Everything NOT explicitly inside the room is not observable anymore
+	; That also excludes objects inside objects
 	; Note. Except for what we are grabbing
 	(forall (?y - object)
 	    (when (and (not (inside ?y ?room_arg)) (not (grabbed ?char_arg ?y)))
@@ -89,6 +79,7 @@
   :effect
     ; Note: this planner does not consider that you may also be close 
     ; to other objects, hopefully the RL system should learn that
+    
     (and 
 	(close ?char_arg ?obj_arg)
 	(forall (?other_obj - object)
@@ -97,6 +88,19 @@
 	)
 	(found ?char_arg ?obj_arg)
 	; If we are in a room, everything in the room is observable
+
+	(forall (?other_obj - object)
+		(when (inside ?other_obj ?obj_arg)
+		      (close ?char_arg ?other_obj))
+	)
+    
+	; All the objects inside if it is open are observable
+
+	(forall (?other_obj - object)
+		(when (or (ontop ?other_obj ?obj_arg) 
+			  (and (open ?obj_arg) (inside ?other_obj ?obj_arg)))
+		      (observable ?char_arg ?other_obj))
+	)
     )
 )
 
@@ -114,7 +118,7 @@
     (and (grabbed ?char_arg ?obj) (increase (objects_grabbed) 1)
 	 (forall (?obj_dest - object) 
 		 (when (or (inside ?obj ?obj_dest) (ontop ?obj ?obj_dest))
-		       (and (not (inside ?obj ?obj_dest)) (not (ontop ?obj ?obj_dest)))
+		       (and (not (inside ?obj ?obj_dest)) (not (ontop ?obj ?obj_dest)) (not (close ?obj ?obj_dest)))
 		 )
 	 )
     )

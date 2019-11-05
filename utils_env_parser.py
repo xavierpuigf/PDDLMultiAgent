@@ -35,7 +35,8 @@ def obtain_states_pddl(nodes, obj2pddl_map):
                 if is_true:
                     props.append('({} {})'.format(prop_name, new_name))
                 else:
-                    props.append('(not ({} {}))'.format(prop_name, new_name))
+                    # By default preds are false
+                    pass
     return props
 
 def obtain_properties_pddl(nodes, obj2pddl_map):
@@ -61,7 +62,7 @@ def obtain_properties_pddl(nodes, obj2pddl_map):
     return props
 
 
-def obtain_relations_pddl(edges, obj2pddl_map):
+def obtain_relations_pddl(edges, obj2pddl_map, rooms, first_room):
     map_edges = {
         'INSIDE': 'inside',
         'CLOSE': 'close',
@@ -69,6 +70,9 @@ def obtain_relations_pddl(edges, obj2pddl_map):
         'FACING': 'facing'
     }
     relations = []
+    object_already_inside = []
+    first_room_id = obj2pddl_map[first_room[1]]
+    char_ob = obj2pddl_map[first_room[0]]
     for elem in edges:
         if elem['from_id'] in obj2pddl_map.keys() and elem['to_id'] in obj2pddl_map.keys():
             elem1 = obj2pddl_map[elem['from_id']]
@@ -76,8 +80,26 @@ def obtain_relations_pddl(edges, obj2pddl_map):
             if elem['relation_type'] in map_edges.keys():
                 new_relation = map_edges[elem['relation_type']]
                 relation = (new_relation, elem1, elem2)
+                if new_relation == 'inside' and elem2 not in rooms:
+                    object_already_inside.append(elem1)
                 relations.append(relation)
-    return relations
+
+    # eliminate inside room if object already inside something
+    final_relations = []
+    for relation in relations:
+        rn, o1, o2 = relation
+        if rn != 'inside':
+            final_relations.append(relation)
+        else:
+            if o2 not in rooms or o1 not in object_already_inside:
+                final_relations.append(relation)
+            if o2 not in rooms:
+                final_relations.append(('close', o1, o2))
+                final_relations.append(('close', o2, o1))
+            else:
+                if o2 == first_room_id and o1 not in object_already_inside:
+                    final_relations.append(('observable', char_ob, o1))
+    return final_relations
 
 def convert_to_virtualhome_program(action_list):
     action_list = [x[1:-1].split()[:-1] for x in action_list]
@@ -94,6 +116,9 @@ def convert_to_virtualhome_program(action_list):
 
 def parse_env(env_content, goal, goal_name):
     nodes = env_content['nodes']
+    char_id = [x['id'] for x in nodes if x['class_name'] == 'character'][0]
+    first_room = [x['to_id'] for x in env_content['edges'] if x['from_id'] == char_id and x['relation_type'] == 'INSIDE'][0]
+    first_room = (char_id, first_room)
 
     header = '''
     (define (problem {})
@@ -106,6 +131,7 @@ def parse_env(env_content, goal, goal_name):
     tables = []
 
     objects_pddl, obj2pddl_map_id = convert_objects_pddl(nodes)
+    rooms = [x for x,y in objects_pddl if y == 'room']
 
     states_pddl = obtain_states_pddl(
             env_content['nodes'], 
@@ -117,7 +143,7 @@ def parse_env(env_content, goal, goal_name):
 
     relations_pddl = obtain_relations_pddl(
             env_content['edges'], 
-            obj2pddl_map_id)
+            obj2pddl_map_id, rooms, first_room)
 
     objects = ["(:objects"]
     objects += ['{} - {}'.format(x,y) for x,y in objects_pddl]

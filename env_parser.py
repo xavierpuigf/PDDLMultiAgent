@@ -10,8 +10,8 @@ import argparse
 import pdb
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--folder_env", default='data/input_envs', type=str)
-parser.add_argument("--folder_out", default='data/out_problems', type=str)
+parser.add_argument("--folder_env", default='data/data_complex3/input_envs', type=str)
+parser.add_argument("--folder_out", default='data/data_complex3/out_problems', type=str)
 
 
 

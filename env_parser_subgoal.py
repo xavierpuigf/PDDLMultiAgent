@@ -12,8 +12,8 @@ import argparse
 import pdb
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--folder_env", default='data/data_subgoals/input_envs', type=str)
-parser.add_argument("--folder_out", default='data/data_subgoals/out_problems', type=str)
+parser.add_argument("--folder_env", default='data/data_toy3/input_envs', type=str)
+parser.add_argument("--folder_out", default='data/data_toy3/out_problems', type=str)
 
 
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         nodes_selected = random.choice(node_ids, 5)
         classes_selected = random.choice(class_names, 5)
         goals_and_names = [('findnode_{}'.format(x), Findnode(x)) for x in nodes_selected]
-        goals_and_names += [('findclass_{}'.format(x), Findclass(x)) for x in classes_selected]
+        #goals_and_names += [('findclass_{}'.format(x), Findclass(x)) for x in classes_selected]
         
         for goal_name, goal in goals_and_names:
             final_pddl, success = utils_env_parser.parse_env(env_content, goal, goal_name)

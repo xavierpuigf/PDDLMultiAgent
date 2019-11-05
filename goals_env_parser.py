@@ -38,6 +38,8 @@ class Findnode(Goal):
         self.id_num = id_num
     def compute_goal(self, object_dict, graph):
         node_name_str = object_dict[self.id_num]
+        if int(node_name_str.split('_')[-1]) != self.id_num:
+            pdb.set_trace()
         char_node = [x for x in graph['nodes'] if x['class_name'] == 'character'][0]
         char_node = object_dict[char_node['id']]
         return '(and (observable {0} {1}) (close {0} {1}))'.format(char_node, node_name_str), True
@@ -63,7 +65,7 @@ class TableSet(Goal):
 
     def compute_goal(self, object_dict, graph):
         tables = []
-        objects_needed = ['glass', 'plate']
+        objects_needed = ['cup', 'plate']
         objects_needed = [(x, self.num_people) for x in objects_needed]
         objects_type = []
         for object_name, num_obj in objects_needed:

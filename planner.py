@@ -41,7 +41,7 @@ def online_planner(domain_name, problem_name, file_out):
 def local_planner(domain_name, problem_name, file_out):
     # Based on: https://github.com/LAPKT-dev/LAPKT-public/tree/master/planners/siw_plus-then-bfs_f-ffparser
     # ./sw+bfsf/siw-then-bfsf --domain domain.pddl --problem example_out.pddl out_ex
-    stats_dir = '/'.join(file_out.split('/')[:-2]) + '/stats/' 
+    stats_dir = '/'.join(file_out.split('/')[:-3]) + '/stats/' 
     file_stats = stats_dir + file_out.split('/')[-1] + '_stats.txt'
     os.makedirs(stats_dir, exist_ok=True)
     with open(file_stats, 'w+') as outfile:
