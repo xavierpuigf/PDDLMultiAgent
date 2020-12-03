@@ -1,0 +1,8 @@
+[
+    {
+        "file_name": "file_0",
+        "pddl_path": "data_example/out_problems/file_0.pddl",
+        "env_path": "data_example/input_envs/init_graph.json",
+        "goal": "relax_watch_tv"
+    }
+]

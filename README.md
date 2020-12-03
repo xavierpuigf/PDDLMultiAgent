@@ -6,18 +6,19 @@ To find a plan for the `example_problem.pddl` run
 Use this API to solve the PDDL http://planning.domains/
 
 
-You can also find a plan (for set up a table) using a real environment. Generate the pddl from a given set of files with
+You can also find a plan for some tasks using a VirtualHome environment. Generate the PDDL from a given set of files with
 
 ```
 python env_parser.py
 ```
+It will generate a set of  PDDL problems under `data_example/out_problems`. You can solve those using:
 
-And then solve it using
 ```
-python planner.py
+python planner.py --problem_name data_example/out_problems/file_0.pddl
 ```
 
 You can also create your own environments, to be solved with PDDL. Checkout
+
 ```
 generate_init_envs.py
 ```
